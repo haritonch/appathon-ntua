@@ -8,4 +8,4 @@
 ## Υλοποίηση
 Για τα δεδομένα χρησιμοποιηθούν τα απαιτούμενα [web services](http://147.102.19.19/wordpress/web-services/). Στην περίπτωση που δεν είναι δυνατό να υλοποιηθούν αποδοτικά αυτά που θέλω, θα δημιουργήσω κάποια βάση δεδομένων και ένα διαφορετικό, δικό μου API.
 
-Για το front end: Javascript (React), HTML, CSS (Bootstrap)
+Για το front end: HTML, CSS (Bootstrap), Javascript (React)
