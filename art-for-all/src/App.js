@@ -15,45 +15,71 @@ const MainArtwork = (props) => (
 );
 
 const ThumbnailImage = (props) => (
-  <img className="thumbnail-image" src={props.url} alt="thumbnail image" />
+  <img className="thumbnail-image" src={props.url} alt="thumbnail"
+       onClick={() => props.selectImage(props.obectID)}/>
 );
 
 class MoreByArtist extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      objects: null,
+    };
+  }
+
+  getObjects = async () => {
+    const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&artistOrCulture=true&q=${this.props.artistName}`);
+    const responseJSON = await response.json();
+    const objIDs = responseJSON.objectIDs;
+    const objects = [];
+    for (let objID of objIDs.slice(0, 5)) {
+      const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objID}`);
+      const obj = await response.json();
+      objects.push(obj);
+    }
+    console.log(objects);
+    this.setState({
+      objects,
+    });
+  }
+
+  componentDidMount() {
+    this.getObjects();
+  }
+
   render(){
-    return (
-      <div className="more-by-artist">
-        <p>More by {this.props.artistName}</p>
-        <div className="thumbnail">
-          {
-            this.props.imageURLs.map((url) => (
-                <ThumbnailImage
-                  url={url}
-                />
-              )
-            )
-          }
+    if (this.state.objects) {
+      let thumbnailImages = this.state.objects.map( (obj) => (
+          <ThumbnailImage
+            url={obj.primaryImageSmall}
+            obectID={obj.objectID}
+            selectImage={this.props.selectImage}
+          />
+        )
+      );
+      return (
+        <div className="more-by-artist">
+          <p>More by {this.props.artistName}</p>
+          <div className="thumbnail">
+            { thumbnailImages }
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
+    else {
+      return <div></div>
+    }
   }
 }
 
 class Discover extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log(this.props.mainObject);
-    this.state = {
-      mainObject: this.props.mainObject,
-
-    };
-  }
-
   render() {
     return (
         this.props.mainObject.artistDisplayName ?
         <MoreByArtist
           artistName={this.props.mainObject.artistDisplayName}
           imageURLs={["https://images.metmuseum.org/CRDImages/ep/web-large/DT1396.jpg"]}
+          selectImage={this.props.selectImage}
         /> : <div></div>
     );
   }
@@ -63,27 +89,22 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      objects: null,
-      mainObject: null,
+      mainObject: {},
     };
   }
 
-  componentDidMount = async () => {
-    let response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects');
-    const objects = await response.json().objectIDs;
-    response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${436532}`)
-    const mainObject = await response.json();
+  async componentDidMount() {
+    let response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${436532}`);
+    let obj = await response.json();
     this.setState({
-      objects,
-      mainObject,
-    });
+      mainObject: obj,
+    })
   }
 
-  getObject = async (objId) => {
-    const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objId}`);
-    const object = await response.json();
-    console.log(object);
-    return object;
+  selectImage = (obj) => {
+    this.setState({
+      mainObject: obj,
+    });
   }
 
   render() {
@@ -92,7 +113,8 @@ class App extends React.Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col left-half">
-              {this.state.mainObject ?
+              {
+                this.state.mainObject ?
                 <MainArtwork
                   object={this.state.mainObject}
                 /> : <div></div>
@@ -102,6 +124,7 @@ class App extends React.Component {
               {this.state.mainObject ?
                 <Discover
                   mainObject={this.state.mainObject}
+                  selectImage={this.selectImage}
                 /> : <div></div>
               }
             </div>

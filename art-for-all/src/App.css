@@ -10,17 +10,17 @@
 
 .thumbnail {
   width: 400px;
-  height: 101px;
+  height: 150px;
   overflow: auto;
   white-space: nowrap;
   margin: auto;
 }
 
 .thumbnail-image {
-  height: 100px;
+  height: 150px;
   width: auto;
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 15px;
 }
 
 .primary-image:hover {
@@ -51,4 +51,10 @@
 
 .main-info h4 {
   font-weight: 100;
+}
+
+.null {
+  background-color: red;
+  width: 100px;
+  height: 100px;
 }
