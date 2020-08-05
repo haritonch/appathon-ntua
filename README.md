@@ -1,11 +1,7 @@
 # appathon-ntua
 
-## Ιδέα και Functionalities
-Ένα front-end μέσω του οποίου κάποιος μπορεί να διαλέξει μία στάση ως αφετηρία και να δει όλες τις στάσεις οι οποίες είναι προσβάσιμες από αυτή τη στάση μέσω των λεωφορείων της πόλης.
+## Project Goal
+The goal of this project is to build a front-end app that makes requests to the [Met Museum API](https://metmuseum.github.io/) and display paintings and information about them. The final project will look like Instagram's explore page, but filled with paintings. When the user clicks on a painting, requests are made to bring more relevant paintings to the clicked one (same period, same artist, same collection, etc.)
 
-Εάν ο χρήστης επιλέξει και μία ακόμη στάση-προορισμό από τις παραπάνω στάσεις, η εφαρμογή θα του δείχνει και τις αλλαγές που πρέπει να κάνει, σε ποιές στάσεις πρέπει να κατέβει και ποια λεωφορεία πρέπει να πάρει για να φτάσει στον προορισμό του.
-
-## Υλοποίηση
-Για τα δεδομένα χρησιμοποιηθούν τα απαιτούμενα [web services](http://147.102.19.19/wordpress/web-services/). Στην περίπτωση που δεν είναι δυνατό να υλοποιηθούν αποδοτικά αυτά που θέλω, θα δημιουργήσω κάποια βάση δεδομένων και ένα διαφορετικό, δικό μου API.
-
-Για το front end: HTML, CSS (Bootstrap), Javascript (React)
+## Implementation
+The implementation will be done using HTML, CSS (Bootstrap), Javascript (React)
