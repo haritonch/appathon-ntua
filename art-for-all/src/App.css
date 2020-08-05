@@ -1,0 +1,54 @@
+.App {
+  text-align: center;
+}
+
+.primary-image {
+  width: 400px;
+  height: auto;
+  transition: 2s;
+}
+
+.thumbnail {
+  width: 400px;
+  height: 101px;
+  overflow: auto;
+  white-space: nowrap;
+  margin: auto;
+}
+
+.thumbnail-image {
+  height: 100px;
+  width: auto;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.primary-image:hover {
+  transform: scale(1.3);
+}
+
+.left-half {
+  color: #ccc;
+  background-color: #333;
+  height: 100vh;
+  transition: 2s;
+}
+
+.right-half {
+  height: 100vh;
+  background-color: #bbb;
+}
+
+.left-half:hover {
+  color: #222;
+  background-color: #222;
+}
+
+.main-info {
+  width: auto;
+  margin: 20px auto;
+}
+
+.main-info h4 {
+  font-weight: 100;
+}
