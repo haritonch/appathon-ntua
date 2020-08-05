@@ -16,14 +16,14 @@ const MainArtwork = (props) => (
 
 const ThumbnailImage = (props) => (
   <img className="thumbnail-image" src={props.url} alt="thumbnail"
-       onClick={() => props.selectImage(props.obectID)}/>
+       onClick={() => {props.selectImage(props.object)}}/>
 );
 
 class MoreByArtist extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      objects: null,
+      objects: [],
     };
   }
 
@@ -32,15 +32,13 @@ class MoreByArtist extends React.Component {
     const responseJSON = await response.json();
     const objIDs = responseJSON.objectIDs;
     const objects = [];
-    for (let objID of objIDs.slice(0, 5)) {
+    for (let objID of objIDs) {
       const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objID}`);
       const obj = await response.json();
-      objects.push(obj);
+      this.setState({
+        objects: this.state.objects.concat([obj]),
+      });
     }
-    console.log(objects);
-    this.setState({
-      objects,
-    });
   }
 
   componentDidMount() {
@@ -52,7 +50,7 @@ class MoreByArtist extends React.Component {
       let thumbnailImages = this.state.objects.map( (obj) => (
           <ThumbnailImage
             url={obj.primaryImageSmall}
-            obectID={obj.objectID}
+            obect={obj}
             selectImage={this.props.selectImage}
           />
         )
