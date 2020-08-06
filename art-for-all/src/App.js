@@ -16,7 +16,7 @@ const MainArtwork = (props) => (
 
 const ThumbnailImage = (props) => (
   <img className="thumbnail-image" src={props.url} alt="thumbnail"
-       onClick={() => { props.selectImage(props.object); }}/>
+       onClick={() => {props.selectImage(props.object)}}/>
 );
 
 class MoreByArtist extends React.Component {
