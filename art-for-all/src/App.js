@@ -19,6 +19,75 @@ const ThumbnailImage = (props) => (
        onClick={() => {props.selectImage(props.object)}}/>
 );
 
+class MoreInDepartment extends React.Component {
+  constructor(props) {
+    super(props);
+    this.deptIdOf = new Object();
+    this.state = {
+      objects: [],
+    }
+  }
+
+  createNameIdMapping = async () => {
+    const response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/departments');
+    const responseJSON = await response.json();
+    for (let dept of responseJSON.departments) {
+      this.deptIdOf[dept.displayName] = dept.departmentId;
+    }
+  }
+
+  getObjects = async () => {
+    let response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/departments');
+    let responseJSON = await response.json();
+    for (let dept of responseJSON.departments) {
+      this.deptIdOf[dept.displayName] = dept.departmentId;
+    }
+    console.log(this.deptIdOf);
+    console.log(this.props.departmentName);
+    const deptID = this.deptIdOf[this.props.departmentName];
+    console.log(deptID);
+    response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?departmentId=${deptID}&hasImages=true&q=%22%22`);
+    responseJSON = await response.json();
+    const objIDs = responseJSON.objectIDs;
+    const selection = objIDs.sort(() => .5 - Math.random()).slice(0, 6);
+    for (let objID of selection) {
+      const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objID}`);
+      const obj = await response.json();
+      this.setState({
+        objects: this.state.objects.concat([obj]),
+      });
+    }
+  }
+
+  componentDidMount() {
+    this.getObjects();
+  }
+
+  render() {
+    if (this.state.objects) {
+      let thumbnailImages = this.state.objects.map( (obj) => (
+          <ThumbnailImage
+            url={obj.primaryImageSmall}
+            object={obj}
+            selectImage={this.props.selectImage}
+          />
+        )
+      );
+      return (
+        <div className="more in-department">
+          <p>More in department: {this.props.departmentName}</p>
+          <div className="thumbnail">
+            { thumbnailImages }
+          </div>
+        </div>
+      );
+    }
+    else {
+      return <div></div>
+    }
+  }
+}
+
 class MoreByArtist extends React.Component {
   constructor(props) {
     super(props);
@@ -32,7 +101,7 @@ class MoreByArtist extends React.Component {
     const responseJSON = await response.json();
     const objIDs = responseJSON.objectIDs;
     const objects = [];
-    for (let objID of objIDs) {
+    for (let objID of objIDs.sort(() => .5 - Math.random()).slice(0, 6)) {
       const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objID}`);
       const obj = await response.json();
       this.setState({
@@ -47,7 +116,7 @@ class MoreByArtist extends React.Component {
 
   render(){
     if (this.state.objects) {
-      let thumbnailImages = this.state.objects.map( (obj) => (
+      const thumbnailImages = this.state.objects.map( (obj) => (
           <ThumbnailImage
             url={obj.primaryImageSmall}
             object={obj}
@@ -56,7 +125,7 @@ class MoreByArtist extends React.Component {
         )
       );
       return (
-        <div className="more-by-artist">
+        <div className="more by-artist more">
           <p>More by {this.props.artistName}</p>
           <div className="thumbnail">
             { thumbnailImages }
@@ -73,12 +142,20 @@ class MoreByArtist extends React.Component {
 class Explore extends React.Component {
   render() {
     return (
-        this.props.mainObject.artistDisplayName ?
-        <MoreByArtist
-          artistName={this.props.mainObject.artistDisplayName}
-          imageURLs={["https://images.metmuseum.org/CRDImages/ep/web-large/DT1396.jpg"]}
-          selectImage={this.props.selectImage}
-        /> : <div></div>
+
+        this.props.mainObject.artistDisplayName && this.props.mainObject.department ?
+        <div>
+          <MoreByArtist
+            mainObject={this.props.mainObject}
+            artistName={this.props.mainObject.artistDisplayName}
+            selectImage={this.props.selectImage}
+          />
+          <MoreInDepartment
+            mainObject={this.props.mainObject}
+            departmentName={this.props.mainObject.department}
+            selectImage={this.props.selectImage}
+          />
+      </div> : <div></div>
     );
   }
 }
