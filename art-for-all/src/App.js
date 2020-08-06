@@ -3,20 +3,20 @@ import './App.css';
 
 const MainArtwork = (props) => (
   <div className="main-artwork">
-    <div className="main-info">
-      <h1 className="title">{props.object.title}</h1>
-      <h4 className="date">{props.object.objectDate}</h4>
-      <h3 className="artist">{props.object.artistDisplayName}</h3>
-    </div>
     <a href={props.object.objectURL} target="_blank">
       <img className="primary-image" src={props.object.primaryImageSmall} alt="primary image"/>
     </a>
+    <div className="main-info">
+      <h2 className="title">{props.object.title}</h2>
+      <h4 className="date">{props.object.objectDate}</h4>
+      <h3 className="artist">{props.object.artistDisplayName}</h3>
+    </div>
   </div>
 );
 
 const ThumbnailImage = (props) => (
   <img className="thumbnail-image" src={props.url} alt="thumbnail"
-       onClick={() => {props.selectImage(props.object)}}/>
+       onClick={() => { props.selectImage(props.object); }}/>
 );
 
 class MoreByArtist extends React.Component {
@@ -50,7 +50,7 @@ class MoreByArtist extends React.Component {
       let thumbnailImages = this.state.objects.map( (obj) => (
           <ThumbnailImage
             url={obj.primaryImageSmall}
-            obect={obj}
+            object={obj}
             selectImage={this.props.selectImage}
           />
         )
