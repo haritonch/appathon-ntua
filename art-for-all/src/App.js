@@ -15,15 +15,16 @@ const MainArtwork = (props) => (
 );
 
 const ThumbnailImage = (props) => (
-  <img className="thumbnail-image" src={props.url} alt="thumbnail"
+  <img className="thumbnail-image" src={props.url} alt={props.mainObject}
        onClick={() => {props.selectImage(props.object)}}/>
 );
 
 class MoreInDepartment extends React.Component {
   constructor(props) {
     super(props);
-    this.deptIdOf = new Object();
+    this.deptIdOf = {};
     this.state = {
+      mainObject: this.props.mainObject,
       objects: [],
     }
   }
@@ -37,15 +38,15 @@ class MoreInDepartment extends React.Component {
   }
 
   getObjects = async () => {
+    this.setState({
+      objects: [],
+    });
     let response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/departments');
     let responseJSON = await response.json();
     for (let dept of responseJSON.departments) {
       this.deptIdOf[dept.displayName] = dept.departmentId;
     }
-    console.log(this.deptIdOf);
-    console.log(this.props.departmentName);
     const deptID = this.deptIdOf[this.props.departmentName];
-    console.log(deptID);
     response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?departmentId=${deptID}&hasImages=true&q=%22%22`);
     responseJSON = await response.json();
     const objIDs = responseJSON.objectIDs;
@@ -92,21 +93,26 @@ class MoreByArtist extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      mainObject: this.props.mainObject,
       objects: [],
     };
   }
 
   getObjects = async () => {
+    this.setState({
+      objects: [],
+    });
     const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&artistOrCulture=true&q=${this.props.artistName}`);
     const responseJSON = await response.json();
     const objIDs = responseJSON.objectIDs;
-    const objects = [];
-    for (let objID of objIDs.sort(() => .5 - Math.random()).slice(0, 6)) {
+    for (let objID of objIDs.sort(() => .3 - Math.random()).slice(0, 10)) {
       const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objID}`);
       const obj = await response.json();
-      this.setState({
-        objects: this.state.objects.concat([obj]),
-      });
+      if (obj.artistDisplayName === this.state.mainObject.artistDisplayName) {
+        this.setState({
+          objects: this.state.objects.concat([obj]),
+        });
+      }
     }
   }
 
@@ -118,6 +124,7 @@ class MoreByArtist extends React.Component {
     if (this.state.objects) {
       const thumbnailImages = this.state.objects.map( (obj) => (
           <ThumbnailImage
+            mainObject={this.props.mainObject}
             url={obj.primaryImageSmall}
             object={obj}
             selectImage={this.props.selectImage}
@@ -164,7 +171,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      mainObject: {},
+      mainObject: null,
     };
   }
 
