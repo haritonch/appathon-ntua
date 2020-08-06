@@ -39,7 +39,7 @@
   background-color: #333;
   height: 100vh;
   transition: 2s;
-  overflow-y: hidden;
+  overflow-y: scroll;
 }
 
 .left-half:hover {
