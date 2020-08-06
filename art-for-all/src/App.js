@@ -70,7 +70,7 @@ class MoreByArtist extends React.Component {
   }
 }
 
-class Discover extends React.Component {
+class Explore extends React.Component {
   render() {
     return (
         this.props.mainObject.artistDisplayName ?
@@ -120,7 +120,7 @@ class App extends React.Component {
             </div>
             <div className="col right-half">
               {this.state.mainObject ?
-                <Discover
+                <Explore
                   mainObject={this.state.mainObject}
                   selectImage={this.selectImage}
                 /> : <div></div>
