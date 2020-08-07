@@ -8,7 +8,7 @@ const MainArtwork = (props) => (
     </a>
     <div className="main-info">
       <h2 className="title">{props.object.title}</h2>
-      <h4 className="date">{props.object.objectDate}</h4>
+      <h4 className="date">{props.object.objectDate} {props.object.country ? "," + props.object.country : ""}</h4>
       <h3 className="artist">{props.object.artistDisplayName}</h3>
     </div>
   </div>
@@ -16,7 +16,7 @@ const MainArtwork = (props) => (
 
 const ThumbnailImage = (props) => (
   <img className="thumbnail-image" src={props.url} alt={props.object.title}
-       onClick={() => {props.selectImage(props.object)}}/>
+       onClick={() => {props.selectImage(props.object);}}/>
 );
 
 class YouMightAlsoLike extends React.Component {
@@ -134,20 +134,25 @@ class App extends React.Component {
     };
   }
 
+  getMainObject = async (objectID) => {
+    let response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
+    let mainObject = await response.json();
+    this.setState({
+      mainObject,
+    });
+  }
+
   getMoreByArtist = async () => {
     this.setState({
       moreObjectsByArtist: [],
     });
-    const artistName = this.state.mainObject.artistDisplayName;
-    const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&artistOrCulture=true&q=${artistName}`);
+    const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&artistOrCulture=true&q=${this.state.mainObject.artistDisplayName}`);
     const responseJSON = await response.json();
     const objectIDs = responseJSON.objectIDs;
-    console.log(objectIDs);
-    for (let objectID of objectIDs.sort(() => .3 - Math.random()).slice(0, 10)) {
+    for (let objectID of objectIDs) {
       const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
       const object = await response.json();
-      if (object.artistDisplayName === artistName) {
-        console.log("Im In");
+      if (object.artistDisplayName === this.state.mainObject.artistDisplayName) {
         this.setState({
           moreObjectsByArtist: this.state.moreObjectsByArtist.concat([object]),
         });
@@ -173,12 +178,21 @@ class App extends React.Component {
     }
   }
 
-  getMainObject = async (objectID) => {
-    let response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
-    let mainObject = await response.json();
+  getYouMightLike = async () => {
     this.setState({
-      mainObject,
+      moreObjectsYouMightLike: [],
     });
+    const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=""`);
+    const responseJSON = await response.json();
+    const objectIDs = responseJSON.objectIDs;
+    for (let i = 0; i < 10; i++) {
+      const objectID = objectIDs[Math.floor(Math.random() * objectIDs.length)];
+      const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
+      const object = await response.json();
+      this.setState({
+        moreObjectsYouMightLike: this.state.moreObjectsYouMightLike.concat([object]),
+      });
+    }
   }
 
   createDeptIdOf = async () => {
@@ -186,22 +200,6 @@ class App extends React.Component {
     const responseJSON = await response.json();
     for (let dept of responseJSON.departments) {
       this.deptIdOf[dept.displayName] = dept.departmentId;
-    }
-  }
-
-  getYouMightLike = async () => {
-    this.setState({
-      moreObjectsYouMightLike: [],
-    })
-    const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=""`);
-    const responseJSON = await response.json();
-    const objectIDs = responseJSON.objectIDs;
-    for (let objectID of objectIDs.sort(() => .3 - Math.random()).slice(0, 10)) {
-      const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
-      const object = await response.json();
-      this.setState({
-        moreObjectsYouMightLike: this.state.moreObjectsYouMightLike.concat([object]),
-      });
     }
   }
 
@@ -217,17 +215,12 @@ class App extends React.Component {
     });
   }
 
-  selectImage = async (mainObject) => {
-    const oldMainObject = this.state.mainObject;
-    this.setState({
-      mainObject
+  selectImage = async (object) => {
+    await this.setState({
+      mainObject: object,
     });
-    if (mainObject.artistDisplayName !== oldMainObject.artistDisplayName) {
-      this.getMoreByArtist();
-    }
-    if (mainObject.department !== oldMainObject.department) {
-      this.getMoreInDepartment();
-    }
+    this.getMoreByArtist();
+    this.getMoreInDepartment();
     this.getYouMightLike();
   }
 
