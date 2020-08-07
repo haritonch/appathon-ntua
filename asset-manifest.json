@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/appathon-ntua/static/css/main.6bc24ede.chunk.css",
+    "main.js": "/appathon-ntua/static/js/main.b4abd15c.chunk.js",
+    "main.js.map": "/appathon-ntua/static/js/main.b4abd15c.chunk.js.map",
+    "runtime-main.js": "/appathon-ntua/static/js/runtime-main.29350820.js",
+    "runtime-main.js.map": "/appathon-ntua/static/js/runtime-main.29350820.js.map",
+    "static/js/2.b62a0d69.chunk.js": "/appathon-ntua/static/js/2.b62a0d69.chunk.js",
+    "static/js/2.b62a0d69.chunk.js.map": "/appathon-ntua/static/js/2.b62a0d69.chunk.js.map",
+    "index.html": "/appathon-ntua/index.html",
+    "precache-manifest.5f050524e300cad3374f136ba1631518.js": "/appathon-ntua/precache-manifest.5f050524e300cad3374f136ba1631518.js",
+    "service-worker.js": "/appathon-ntua/service-worker.js",
+    "static/css/main.6bc24ede.chunk.css.map": "/appathon-ntua/static/css/main.6bc24ede.chunk.css.map",
+    "static/js/2.b62a0d69.chunk.js.LICENSE.txt": "/appathon-ntua/static/js/2.b62a0d69.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.29350820.js",
+    "static/js/2.b62a0d69.chunk.js",
+    "static/css/main.6bc24ede.chunk.css",
+    "static/js/main.b4abd15c.chunk.js"
+  ]
+}
