@@ -222,10 +222,10 @@ class App extends React.Component {
     this.setState({
       mainObject
     });
-    if (mainObject.artistDisplayName != oldMainObject.artistDisplayName) {
+    if (mainObject.artistDisplayName !== oldMainObject.artistDisplayName) {
       this.getMoreByArtist();
     }
-    if (mainObject.department != oldMainObject.department) {
+    if (mainObject.department !== oldMainObject.department) {
       this.getMoreInDepartment();
     }
     this.getYouMightLike();
