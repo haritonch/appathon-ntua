@@ -27,6 +27,7 @@ class YouMightAlsoLike extends React.Component {
             url={obj.primaryImageSmall}
             object={obj}
             selectImage={this.props.selectImage}
+            key={obj.objectID}
           />
         )
       );
@@ -53,6 +54,7 @@ class MoreInDepartment extends React.Component {
             url={obj.primaryImageSmall}
             object={obj}
             selectImage={this.props.selectImage}
+            key={obj.objectID}
           />
         )
       );
@@ -79,6 +81,7 @@ class MoreByArtist extends React.Component {
             url={obj.primaryImageSmall}
             object={obj}
             selectImage={this.props.selectImage}
+            key={obj.objectID}
           />
         )
       );
@@ -148,7 +151,7 @@ class App extends React.Component {
     });
     const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&artistOrCulture=true&q=${this.state.mainObject.artistDisplayName}`);
     const responseJSON = await response.json();
-    const objectIDs = responseJSON.objectIDs;
+    const objectIDs = await responseJSON.objectIDs;
     for (let objectID of objectIDs) {
       const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
       const object = await response.json();
@@ -167,7 +170,7 @@ class App extends React.Component {
     const deptID = this.deptIdOf[this.state.mainObject.department];
     const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?departmentId=${deptID}&hasImages=true&q=%22%22`);
     const responseJSON = await response.json();
-    const objectIDs = responseJSON.objectIDs;
+    const objectIDs = await responseJSON.objectIDs;
     const selection = objectIDs.sort(() => .5 - Math.random()).slice(0, 6);
     for (let objectID of selection) {
       const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
@@ -216,19 +219,13 @@ class App extends React.Component {
   }
 
   selectImage = async (object) => {
-    const oldMainObject = this.state.mainObject;
     await this.setState({
       mainObject: object,
     });
-    if (this.state.mainObject.artistDisplayName !== oldMainObject.artistDisplayName) {
-      this.getMoreByArtist();
-    }
-    else if (this.state.mainObject.department !== oldMainObject.department) {
-      this.getMoreInDepartment();
-    }
-    else {
-      this.getYouMightLike();
-    }
+    this.getMoreByArtist();
+    this.getMoreInDepartment();
+    this.getYouMightLike();
+
   }
 
   render() {
