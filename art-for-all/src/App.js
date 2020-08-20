@@ -72,7 +72,7 @@ class App extends React.Component {
       const objectID = objectIDs[Math.floor(Math.random() * objectIDs.length)];
       const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
       const object = await response.json();
-      if (object.artistDisplayName != "") {
+      if (object.artistDisplayName !== "") {
         i--;
         this.setState({
           moreObjectsYouMightLike: this.state.moreObjectsYouMightLike.concat([object]),
