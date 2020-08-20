@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "66199917427a161a9f40b07cf17843a1",
+    "revision": "b642bcfb0ba4291c34c2e47ba09b0956",
     "url": "/appathon-ntua/index.html"
   },
   {
-    "revision": "a3e888b046eee90655df",
+    "revision": "ddf0dc0a8fffba4cf825",
     "url": "/appathon-ntua/static/css/main.6bc24ede.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/appathon-ntua/static/js/2.b62a0d69.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "a3e888b046eee90655df",
-    "url": "/appathon-ntua/static/js/main.cdc21e2e.chunk.js"
+    "revision": "ddf0dc0a8fffba4cf825",
+    "url": "/appathon-ntua/static/js/main.298b7d49.chunk.js"
   },
   {
     "revision": "5d2365be1b00f2f13449",
