@@ -102,13 +102,17 @@ class App extends React.Component {
   }
 
   selectImage = async (object) => {
+    const oldMainObject = this.state.mainObject;
     await this.setState({
       mainObject: object,
     });
-    this.getMoreByArtist();
-    this.getMoreInDepartment();
+    if (object.artistDisplayName !== oldMainObject.artistDisplayName) {
+      this.getMoreByArtist();
+    }
+    if (object.department !== oldMainObject.department) {
+      this.getMoreInDepartment();
+    }
     this.getYouMightLike();
-
   }
 
   render() {
