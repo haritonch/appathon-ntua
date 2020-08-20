@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/appathon-ntua/precache-manifest.5f050524e300cad3374f136ba1631518.js"
+  "/appathon-ntua/precache-manifest.1b31555f4abb124f2ffb6c018f88fe8e.js"
 );
 
 self.addEventListener('message', (event) => {
