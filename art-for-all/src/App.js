@@ -30,7 +30,8 @@ class App extends React.Component {
     const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&artistOrCulture=true&q=${this.state.mainObject.artistDisplayName}`);
     const responseJSON = await response.json();
     const objectIDs = await responseJSON.objectIDs;
-    for (let objectID of objectIDs) {
+    const selection = objectIDs.sort(() => .5 - Math.random()).slice(0, 6);
+    for (let objectID of selection) {
       const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
       const object = await response.json();
       if (object.artistDisplayName === this.state.mainObject.artistDisplayName) {
@@ -66,13 +67,17 @@ class App extends React.Component {
     const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=""`);
     const responseJSON = await response.json();
     const objectIDs = responseJSON.objectIDs;
-    for (let i = 0; i < 10; i++) {
+    let i = 6;
+    while (i > 0) {
       const objectID = objectIDs[Math.floor(Math.random() * objectIDs.length)];
       const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
       const object = await response.json();
-      this.setState({
-        moreObjectsYouMightLike: this.state.moreObjectsYouMightLike.concat([object]),
-      });
+      if (object.artistDisplayName != "") {
+        i--;
+        this.setState({
+          moreObjectsYouMightLike: this.state.moreObjectsYouMightLike.concat([object]),
+        });
+      }
     }
   }
 
