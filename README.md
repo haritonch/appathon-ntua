@@ -5,3 +5,6 @@ The goal of this project is to build a front-end app that makes requests to the 
 
 ## Implementation
 The implementation will be done using HTML, CSS (Bootstrap), Javascript (React)
+
+## Run
+The app is deployed with github-pages and you can run it on http://haritonch.github.io/appathon-ntua. To run locally, follow the instructions in art-for-all directory (npm must be installed on your machine).
