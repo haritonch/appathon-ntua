@@ -16,7 +16,7 @@ class App extends React.Component {
   }
 
   getMainObject = async (objectID) => {
-    let response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
+    let response = await fetch('http://127.0.0.1:8080/mainObject');
     let mainObject = await response.json();
     this.setState({
       mainObject,
